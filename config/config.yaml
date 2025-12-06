@@ -1,0 +1,17 @@
+app:
+  name: goapp
+  env: development
+  port: 8080
+
+database:
+  host: mysql
+  port: 3306
+  user: root
+  password: password
+  name: go_app
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 1h
+
+log:
+  level: debug
