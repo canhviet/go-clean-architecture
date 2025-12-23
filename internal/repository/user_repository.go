@@ -34,3 +34,10 @@ func (r *UserRepository) Update(user *model.User) error {
 func (r *UserRepository) Delete(id uint) error {
     return r.db.Delete(&model.User{}, id).Error
 }
+
+func (r *UserRepository) GetPagedAndFiltered(limit, page int) ([]model.User, error) {
+    var users []model.User
+    err := r.db.Scopes(model.NewPaginate(limit, page).PaginatedResult).Find(&users).Error
+
+    return  users, err
+}

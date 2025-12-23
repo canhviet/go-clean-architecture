@@ -29,6 +29,17 @@ func (c *UserController) GetAll(ctx *gin.Context) {
     ctx.JSON(http.StatusOK, gin.H{"data": users})
 }
 
+func (c *UserController) GetList(ctx *gin.Context, limit int, page int) {
+    users, err := c.service.GetList(limit, page)
+
+    if err != nil {
+        ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    ctx.JSON(http.StatusOK, gin.H{"data": users})
+}
+
 // GET /users/:id
 func (c *UserController) GetByID(ctx *gin.Context) {
     idStr := ctx.Param("id")

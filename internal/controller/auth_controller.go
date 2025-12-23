@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/canhviet/go-clean-architecture/internal/dto"
 	"github.com/canhviet/go-clean-architecture/internal/middleware"
@@ -48,12 +49,14 @@ func LoginHandler(c *gin.Context, db *gorm.DB, rds *repository.Redis) {
         return
     }
 
-    middleware.SetAuthCookies(c, toks)
+    middleware.SetAuthResponse(c, toks)
 
     c.JSON(http.StatusOK, gin.H{
         "ok":      true,
         "user_id": user.ID,
-        "message": "Login successful",
+        "access_token":  toks.Access, 
+		"refresh_token": toks.Refresh,  
+		"expires_in":    int(time.Until(toks.ExpAcc).Seconds()),
     })
 }
 
@@ -101,7 +104,7 @@ func RegisterHandler(c *gin.Context, db *gorm.DB, rds *repository.Redis) {
 		return
 	}
 
-	middleware.SetAuthCookies(c, toks)
+	middleware.SetAuthResponse(c, toks)
 
 	user.Password = ""
 
@@ -109,5 +112,8 @@ func RegisterHandler(c *gin.Context, db *gorm.DB, rds *repository.Redis) {
 		"ok":      true,
 		"message": "Register successful",
 		"user":    user,
+		"access_token":  toks.Access,
+		"refresh_token": toks.Refresh,
+		"expires_in":    int(time.Until(toks.ExpAcc).Seconds()),
 	})
 }

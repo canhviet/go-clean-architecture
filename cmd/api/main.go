@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/canhviet/go-clean-architecture/internal/config"
 	"github.com/canhviet/go-clean-architecture/internal/controller"
 	"github.com/canhviet/go-clean-architecture/internal/database"
@@ -45,6 +47,17 @@ func main() {
 		auth.GET("/users/:id", userCtrl.GetByID)
 		auth.PUT("/users/:id", userCtrl.Update)
 		auth.DELETE("/users/:id", userCtrl.Delete)
+		auth.GET("/list-user", func(c *gin.Context) {
+			l := c.Query("limit")
+			p := c.Query("page")
+
+			limit, _ := strconv.Atoi(l)
+			page, _ := strconv.Atoi(p)
+
+			userCtrl.GetList(c, limit, page)
+
+		
+		  })
 
 		// auth.POST("/logout", controller.LogoutHandler)
 		// auth.GET("/me", controller.GetMeHandler)

@@ -21,6 +21,12 @@ func (s *UserService) GetAll() ([]dto.UserResponse, error) {
     return s.toResponseList(users), err
 }
 
+func (s* UserService) GetList(limt int, page int)([]dto.UserResponse, error) {
+    users, err := s.repo.GetPagedAndFiltered(limt, page)
+
+    return  s.toResponseList(users), err
+}
+
 func (s *UserService) GetByID(id uint) (dto.UserResponse, error) {
     user, err := s.repo.FindByID(id)
     return s.toResponse(user), err

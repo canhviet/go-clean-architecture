@@ -52,3 +52,12 @@ func MustCookie(c *gin.Context, name string) (string, error) {
 	}
 	return val, nil
 }
+
+func SetAuthResponse(c *gin.Context, toks *Tokens) {
+	SetAuthCookies(c, toks)
+
+	c.Header("Authorization", "Bearer "+toks.Access)
+	
+	c.Header("X-Access-Token", toks.Access)
+	c.Header("X-Refresh-Token", toks.Refresh)
+}
